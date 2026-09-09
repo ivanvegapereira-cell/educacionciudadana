@@ -1,12 +1,12 @@
 'use client';
 
 import React from 'react';
-import { useAuth } from '@/hooks/useAuth';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 
 export default function HomePage() {
-  const { user, loading } = useAuth();
+  const user = null;
+  const loading = false;
 
   if (loading) {
     return (

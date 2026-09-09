@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plataforma Educativa - Vista Previa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: #f3f4f6;
+            color: #1f2937;
+        }
+
+        .navbar {
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #6b7280;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #1f2937;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+        }
+
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #1f2937;
+        }
+
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4rem 2rem;
+            border-radius: 1rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+
+        .card {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+        }
+
+        .card p {
+            color: #6b7280;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .quiz-card {
+            border-left: 4px solid #2563eb;
+        }
+
+        .quiz-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .quiz-info h4 {
+            margin-bottom: 0.25rem;
+            color: #1f2937;
+        }
+
+        .quiz-info p {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .points {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+        }
+
+        .ranking-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .ranking-table th {
+            background: #f3f4f6;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .ranking-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .ranking-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .position {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2563eb;
+            width: 40px;
+        }
+
+        .position.gold { color: #f59e0b; }
+        .position.silver { color: #9ca3af; }
+        .position.bronze { color: #b45309; }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .badge-green {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-blue {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .breadcrumb {
+            margin-bottom: 2rem;
+            color: #6b7280;
+        }
+
+        .breadcrumb a {
+            color: #2563eb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .message-box {
+            background: #eff6ff;
+            border-left: 4px solid #2563eb;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .message-box strong {
+            color: #1e40af;
+        }
+
+        .mockup-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .mockup-section h2 {
+            margin-bottom: 1.5rem;
+            color: #1f2937;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 2px solid #e5e7eb;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab {
+            padding: 1rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: #6b7280;
+            font-size: 1rem;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #2563eb;
+            border-bottom-color: #2563eb;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            border: 1px solid #93c5fd;
+            color: #1e40af;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">📚 Plataforma Educativa</div>
+        <div class="nav-links">
+            <a onclick="showPage('home')">Inicio</a>
+            <a onclick="showPage('student-dashboard')">Dashboard Estudiante</a>
+            <a onclick="showPage('ranking')">Ranking</a>
+            <a onclick="showPage('teacher-dashboard')">Dashboard Docente</a>
+            <a onclick="showPage('quiz-creator')">Crear Quiz</a>
+            <a onclick="showPage('messaging')">Mensajería</a>
+            <a onclick="showPage('rewards')">Recompensas</a>
+            <button class="btn btn-secondary" onclick="showPage('home')">Logout</button>
+        </div>
+    </div>
+
+    <!-- HOME PAGE -->
+    <div id="home" class="page active">
+        <div class="container">
+            <div class="hero">
+                <h1>📚 Plataforma Educativa Integral</h1>
+                <p>Una plataforma completa para educación ciudadana con cuestionarios interactivos, ranking en tiempo real y asistente IA</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="showPage('student-dashboard')">Ver como Estudiante</button>
+                    <button class="btn btn-primary" onclick="showPage('teacher-dashboard')">Ver como Docente</button>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="card">
+                    <div class="card-icon">📝</div>
+                    <h3>Cuestionarios Interactivos</h3>
+                    <p>Crea y responde cuestionarios con múltiples tipos de preguntas: opción múltiple, verdadero/falso, respuesta corta y ensayos.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🤖</div>
+                    <h3>Asistente IA (Claude)</h3>
+                    <p>Genera preguntas automáticamente, retroalimentación personalizada y evaluación de ensayos con inteligencia artificial.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🏆</div>
+                    <h3>Ranking en Tiempo Real</h3>
+                    <p>Sistema de puntuación con ranking actualizado automáticamente. Compite con tus compañeros de forma sana.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">💰</div>
+                    <h3>Canje de Recompensas</h3>
+                    <p>Acumula puntos y canjéalos por premios y reconocimientos creados por tu docente.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">💬</div>
+                    <h3>Mensajería en Tiempo Real</h3>
+                    <p>Comunícate instantáneamente con tu docente. Mensajes individuales y grupales con actualización en vivo.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon">📊</div>
+                    <h3>Analítica Completa</h3>
+                    <p>Dashboard para docentes con gráficos, reportes de progreso y análisis detallado por estudiante.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STUDENT DASHBOARD -->
+    <div id="student-dashboard" class="page">
+        <div class="container">
+            <div class="breadcrumb">
+                <a onclick="showPage('home')">← Volver al inicio</a>
+            </div>
+
+            <h1>📚 Mi Dashboard - Vista Estudiante</h1>
+            <p style="color: #6b7280; margin-bottom: 2rem;">Bienvenido, Juan Pérez</p>
+
+            <div class="alert alert-info">
+                ✓ <strong>6 puntos</strong> obtenidos | <strong>#12</strong> en ranking | <strong>1</strong> quiz pendiente
+            </div>
+
+            <div class="mockup-section">
+                <h2>Mis Cuestionarios</h2>
+                <div class="grid">
+                    <div class="card quiz-card">
+                        <div class="card-icon">✓</div>
+                        <h3>Democracia en Chile</h3>
+                        <p>Quiz sobre los sistemas democráticos chilenos</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="badge badge-green">Respondido</span>
+                            <span class="points">6/10 pts</span>
+                        </div>
+                    </div>
+
+                    <div class="card quiz-card">
+                        <div class="card-icon">→</div>
+                        <h3>Derechos Humanos</h3>
+                        <p>Evaluación sobre derechos fundamentales</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="badge badge-blue">Pendiente</span>
+                            <span class="points">10 pts</span>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="showPage('quiz-player')">Responder</button>
+                    </div>
+
+                    <div class="card quiz-card">
+                        <div class="card-icon">↓</div>
+                        <h3>Constitución Política</h3>
+                        <p>Conocimientos sobre la carta fundamental</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="badge badge-blue">Próximamente</span>
+                            <span class="points">10 pts</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mockup-section">
+                <h2>Resumen de Actividad</h2>
+                <div class="grid" style="grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                    <div style="text-align: center; padding: 1rem; background: #f3f4f6; border-radius: 0.5rem;">
+                        <div style="font-size: 2rem; font-weight: bold; color: #2563eb;">3</div>
+                        <p style="color: #6b7280;">Quiz Completados</p>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: #f3f4f6; border-radius: 0.5rem;">
+                        <div style="font-size: 2rem; font-weight: bold; color: #2563eb;">6</div>
+                        <p style="color: #6b7280;">Puntos Acumulados</p>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: #f3f4f6; border-radius: 0.5rem;">
+                        <div style="font-size: 2rem; font-weight: bold; color: #2563eb;">75%</div>
+                        <p style="color: #6b7280;">Promedio</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUIZ PLAYER -->
+    <div id="quiz-player" class="page">
+        <div class="container">
+            <div class="breadcrumb">
+                <a onclick="showPage('student-dashboard')">← Volver a Dashboard</a>
+            </div>
+
+            <div class="mockup-section">
+                <h2>📝 Derechos Humanos</h2>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <div>
+                        <p style="color: #6b7280;">Pregunta <strong>2 de 5</strong></p>
+                        <div style="background: #e5e7eb; height: 8px; border-radius: 4px; width: 300px; margin-top: 0.5rem;">
+                            <div style="background: #2563eb; height: 100%; width: 40%; border-radius: 4px;"></div>
+                        </div>
+                    </div>
+                    <div style="font-size: 1.5rem; font-weight: bold; color: #dc2626;">⏱️ 08:45</div>
+                </div>
+
+                <div style="background: #f9fafb; padding: 2rem; border-radius: 0.75rem; margin-bottom: 2rem; border: 1px solid #e5e7eb;">
+                    <h3 style="margin-bottom: 1.5rem;">¿Cuál es el principal derecho humano fundamental?</h3>
+
+                    <div style="space: 1rem;">
+                        <label style="display: block; margin-bottom: 1rem; cursor: pointer;">
+                            <input type="radio" name="answer" style="margin-right: 0.5rem;">
+                            <span style="padding: 0.75rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; display: inline-block; width: calc(100% - 1.5rem);">El derecho a la vida</span>
+                        </label>
+                        <label style="display: block; margin-bottom: 1rem; cursor: pointer;">
+                            <input type="radio" name="answer" checked style="margin-right: 0.5rem;">
+                            <span style="padding: 0.75rem; border: 2px solid #2563eb; border-radius: 0.5rem; display: inline-block; width: calc(100% - 1.5rem); background: #eff6ff;">La dignidad humana</span>
+                        </label>
+                        <label style="display: block; margin-bottom: 1rem; cursor: pointer;">
+                            <input type="radio" name="answer" style="margin-right: 0.5rem;">
+                            <span style="padding: 0.75rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; display: inline-block; width: calc(100% - 1.5rem);">El derecho al trabajo</span>
+                        </label>
+                        <label style="display: block; cursor: pointer;">
+                            <input type="radio" name="answer" style="margin-right: 0.5rem;">
+                            <span style="padding: 0.75rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; display: inline-block; width: calc(100% - 1.5rem);">El derecho a la educación</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem; justify-content: space-between;">
+                    <button class="btn btn-secondary">← Anterior</button>
+                    <button class="btn btn-primary">Siguiente →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RANKING PAGE -->
+    <div id="ranking" class="page">
+        <div class="container">
+            <div class="breadcrumb">
+                <a onclick="showPage('home')">← Volver al inicio</a>
+            </div>
+
+            <h1>🏆 Ranking de Estudiantes</h1>
+            <p style="color: #6b7280; margin-bottom: 2rem;">Tu posición: <strong style="color: #2563eb;">#12</strong></p>
+
+            <div class="mockup-section">
+                <h2 style="margin-bottom: 1.5rem;">Top 3 del Ranking</h2>
+                <div class="grid" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="card" style="text-align: center; border-top: 4px solid #f59e0b;">
+                        <div style="font-size: 3rem;">🥇</div>
+                        <h3>1°</h3>
+                        <p><strong>María García</strong></p>
+                        <p style="color: #6b7280;">maria@ejemplo.com</p>
+                        <p style="font-size: 1.5rem; font-weight: bold; color: #2563eb; margin-top: 1rem;">45 puntos</p>
+                    </div>
+
+                    <div class="card" style="text-align: center; border-top: 4px solid #9ca3af;">
+                        <div style="font-size: 3rem;">🥈</div>
+                        <h3>2°</h3>
+                        <p><strong>Carlos López</strong></p>
+                        <p style="color: #6b7280;">carlos@ejemplo.com</p>
+                        <p style="font-size: 1.5rem; font-weight: bold; color: #2563eb; margin-top: 1rem;">38 puntos</p>
+                    </div>
+
+                    <div class="card" style="text-align: center; border-top: 4px solid #b45309;">
+                        <div style="font-size: 3rem;">🥉</div>
+                        <h3>3°</h3>
+                        <p><strong>Ana Rodríguez</strong></p>
+                        <p style="color: #6b7280;">ana@ejemplo.com</p>
+                        <p style="font-size: 1.5rem; font-weight: bold; color: #2563eb; margin-top: 1rem;">35 puntos</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mockup-section">
+                <h2>Ranking Completo</h2>
+                <table class="ranking-table">
+                    <thead>
+                        <tr>
+                            <th>Posición</th>
+                            <th>Estudiante</th>
+                            <th>Email</th>
+                            <th>Puntos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="position gold">1°</td>
+                            <td><strong>María García</strong></td>
+                            <td>maria@ejemplo.com</td>
+                            <td><strong>45</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="position silver">2°</td>
+                            <td><strong>Carlos López</strong></td>
+                            <td>carlos@ejemplo.com</td>
+                            <td><strong>38</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="position bronze">3°</td>
+                            <td><strong>Ana Rodríguez</strong></td>
+                            <td>ana@ejemplo.com</td>
+                            <td><strong>35</strong></td>
+                        </tr>
+                        <tr style="background: #eff6ff;">
+                            <td class="position">12°</td>
+                            <td><strong>Juan Pérez</strong> (Tú)</td>
+                            <td>juan@ejemplo.com</td>
+                            <td><strong>6</strong></td>
+                        </tr>
+                        <tr>
+                            <td class="position">13°</td>
+                            <td><strong>Pedro Martínez</strong></td>
+                            <td>pedro@ejemplo.com</td>
+                            <td><strong>5</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- TEACHER DASHBOARD -->
+    <div id="teacher-dashboard" class="page">
+        <div class="container">
+            <div class="breadcrumb">
+                <a onclick="showPage('home')">← Volver al inicio</a>
+            </div>
+
+            <h1>👨‍🏫 Dashboard Docente</h1>
+            <p style="color: #6b7280; margin-bottom: 2rem;">Bienvenido, Prof. Roberto Sánchez</p>
+
+            <div class="alert alert-info">
+                ✓ <strong>3 cuestionarios activos</strong> | <strong>45 estudiantes inscritos</strong> | <strong>234 respuestas procesadas</strong>
+            </div>
+
+            <div class="mockup-section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2>Mis Cuestionarios</h2>
+                    <button class="btn btn-primary" onclick="showPage('quiz-creator')">+ Crear Cuestionario</button>
+                </div>
+
+                <div class="grid">
+                    <div class="card quiz-card">
+                        <h3>Democracia en Chile</h3>
+                        <p style="color: #6b7280;">Creado: 15 sep 2024</p>
+                        <div style="margin: 1rem 0;">
+                            <span class="badge badge-green">Publicado</span>
+                            <span style="margin-left: 0.5rem; color: #6b7280;">10 puntos</span>
+                        </div>
+                        <p style="font-size: 0.875rem; color: #6b7280;">
+                            <strong>38</strong> respuestas | Promedio: <strong>7.2/10</strong>
+                        </p>
+                        <button class="btn btn-secondary" style="width: 100%; margin-top: 1rem;">Ver Resultados</button>
+                    </div>
+
+                    <div class="card quiz-card">
+                        <h3>Derechos Humanos</h3>
+                        <p style="color: #6b7280;">Creado: 18 sep 2024</p>
+                        <div style="margin: 1rem 0;">
+                            <span class="badge badge-green">Publicado</span>
+                            <span style="margin-left: 0.5rem; color: #6b7280;">10 puntos</span>
+                        </div>
+                        <p style="font-size: 0.875rem; color: #6b7280;">
+                            <strong>32</strong> respuestas | Promedio: <strong>7.8/10</strong>
+                        </p>
+                        <button class="btn btn-secondary" style="width: 100%; margin-top: 1rem;">Ver Resultados</button>
+                    </div>
+
+                    <div class="card quiz-card">
+                        <h3>Constitución Política</h3>
+                        <p style="color: #6b7280;">Creado: 20 sep 2024</p>
+                        <div style="margin: 1rem 0;">
+                            <span class="badge badge-blue">Borrador</span>
+                            <span style="margin-left: 0.5rem; color: #6b7280;">10 puntos</span>
+                        </div>
+                        <p style="font-size: 0.875rem; color: #6b7280;">
+                            No publicado aún
+                        </p>
+                        <button class="btn btn-secondary" style="width: 100%; margin-top: 1rem;">Editar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mockup-section">
+                <h2>Estadísticas Generales</h2>
+                <div class="grid" style="grid-template-columns: repeat(4, 1fr); gap: 1rem;">
+                    <div style="text-align: center; padding: 1rem; background: #f3f4f6; border-radius: 0.5rem;">
+                        <div style="font-size: 2rem; font-weight: bold; color: #2563eb;">45</div>
+                        <p style="color: #6b7280;">Estudiantes</p>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: #f3f4f6; border-radius: 0.5rem;">
+                        <div style="font-size: 2rem; font-weight: bold; color: #2563eb;">3</div>
+                        <p style="color: #6b7280;">Quizzes Activos</p>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: #f3f4f6; border-radius: 0.5rem;">
+                        <div style="font-size: 2rem; font-weight: bold; color: #2563eb;">102</div>
+                        <p style="color: #6b7280;">Respuestas</p>
+                    </div>
+                    <div style="text-align: center; padding: 1rem; background: #f3f4f6; border-radius: 0.5rem;">
+                        <div style="font-size: 2rem; font-weight: bold; color: #2563eb;">7.3</div>
+                        <p style="color: #6b7280;">Promedio</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUIZ CREATOR -->
+    <div id="quiz-creator" class="page">
+        <div class="container">
+            <div class="breadcrumb">
+                <a onclick="showPage('teacher-dashboard')">← Volver a Dashboard</a>
+            </div>
+
+            <h1>✏️ Crear Cuestionario</h1>
+
+            <div class="mockup-section">
+                <div class="form-group">
+                    <label>Título del Cuestionario</label>
+                    <input type="text" value="Mi Quiz Nuevo" placeholder="Ej: Democracia en Chile">
+                </div>
+
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <textarea placeholder="Descripción opcional..." rows="3">Evaluación sobre sistemas democráticos chilenos</textarea>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Puntos Totales</label>
+                        <input type="number" value="10">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Tiempo Límite (minutos)</label>
+                        <input type="number" value="60">
+                    </div>
+                </div>
+            </div>
+
+            <div class="mockup-section">
+                <h2>Preguntas (2/2 agregadas)</h2>
+
+                <div class="quiz-item">
+                    <div class="quiz-info">
+                        <h4>1. ¿Cuál es el sistema político de Chile?</h4>
+                        <p>Tipo: Opción múltiple | Puntos: 5</p>
+                    </div>
+                    <button class="btn btn-secondary" style="padding: 0.5rem 1rem;">Editar</button>
+                </div>
+
+                <div class="quiz-item">
+                    <div class="quiz-info">
+                        <h4>2. Explica los tres poderes del estado</h4>
+                        <p>Tipo: Ensayo | Puntos: 5</p>
+                    </div>
+                    <button class="btn btn-secondary" style="padding: 0.5rem 1rem;">Editar</button>
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">+ Agregar Pregunta</button>
+            </div>
+
+            <div style="display: flex; gap: 1rem;">
+                <button class="btn btn-primary">Guardar Cuestionario</button>
+                <button class="btn btn-secondary">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MESSAGING -->
+    <div id="messaging" class="page">
+        <div class="container">
+            <div class="breadcrumb">
+                <a onclick="showPage('home')">← Volver al inicio</a>
+            </div>
+
+            <h1>💬 Mensajería en Tiempo Real</h1>
+
+            <div class="mockup-section">
+                <div class="tabs">
+                    <button class="tab active">📢 Mensaje Grupal</button>
+                    <button class="tab">💬 Individual</button>
+                </div>
+
+                <div class="tab-content active">
+                    <div class="form-group">
+                        <label>Destinatarios</label>
+                        <p style="color: #6b7280; font-size: 0.875rem;">45 estudiantes de 3°A</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Asunto</label>
+                        <input type="text" placeholder="Ej: Recordatorio sobre quiz">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mensaje</label>
+                        <textarea rows="4" placeholder="Escribe tu mensaje...">Hola estudiantes, les recuerdo que el quiz de Derechos Humanos vence el viernes. ¡Mucho éxito!</textarea>
+                    </div>
+
+                    <button class="btn btn-primary">Enviar a Todos</button>
+                </div>
+            </div>
+
+            <div class="mockup-section">
+                <h2>Mensajes Recientes</h2>
+                <div style="space: 1rem;">
+                    <div class="message-box">
+                        <strong>María García:</strong> Profesor, ¿puedo entregar el quiz mañana? Tengo un problema técnico.
+                        <p style="font-size: 0.875rem; color: #6b7280; margin-top: 0.5rem;">Hace 2 horas</p>
+                    </div>
+
+                    <div class="message-box">
+                        <strong>Carlos López:</strong> Gracias por la retroalimentación del quiz anterior, me ayudó mucho.
+                        <p style="font-size: 0.875rem; color: #6b7280; margin-top: 0.5rem;">Ayer</p>
+                    </div>
+
+                    <div class="message-box">
+                        <strong>Sistema:</strong> Quiz "Democracia en Chile" completado por 38 estudiantes
+                        <p style="font-size: 0.875rem; color: #6b7280; margin-top: 0.5rem;">Hace 3 días</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REWARDS -->
+    <div id="rewards" class="page">
+        <div class="container">
+            <div class="breadcrumb">
+                <a onclick="showPage('home')">← Volver al inicio</a>
+            </div>
+
+            <h1>🎁 Tienda de Recompensas</h1>
+            <p style="color: #6b7280; margin-bottom: 2rem;">Tienes <strong style="color: #2563eb; font-size: 1.25rem;">6 puntos</strong> disponibles</p>
+
+            <div class="mockup-section">
+                <h2>Premios Disponibles</h2>
+                <div class="grid">
+                    <div class="card" style="text-align: center;">
+                        <div style="font-size: 3rem;">🎖️</div>
+                        <h3>Medalla de Oro</h3>
+                        <p style="color: #6b7280;">Reconocimiento por excelencia académica</p>
+                        <div style="background: #f3f4f6; padding: 1rem; border-radius: 0.5rem; margin: 1rem 0;">
+                            <p style="font-size: 1.5rem; font-weight: bold; color: #2563eb;">25 pts</p>
+                        </div>
+                        <button class="btn btn-secondary" disabled>Puntos insuficientes</button>
+                    </div>
+
+                    <div class="card" style="text-align: center;">
+                        <div style="font-size: 3rem;">📜</div>
+                        <h3>Certificado Especial</h3>
+                        <p style="color: #6b7280;">Reconocimiento impreso para tu portafolio</p>
+                        <div style="background: #f3f4f6; padding: 1rem; border-radius: 0.5rem; margin: 1rem 0;">
+                            <p style="font-size: 1.5rem; font-weight: bold; color: #2563eb;">15 pts</p>
+                        </div>
+                        <button class="btn btn-secondary" disabled>Puntos insuficientes</button>
+                    </div>
+
+                    <div class="card" style="text-align: center;">
+                        <div style="font-size: 3rem;">⭐</div>
+                        <h3>Diploma Destacado</h3>
+                        <p style="color: #6b7280;">Reconocimiento digital destacado</p>
+                        <div style="background: #f3f4f6; padding: 1rem; border-radius: 0.5rem; margin: 1rem 0;">
+                            <p style="font-size: 1.5rem; font-weight: bold; color: #2563eb;">5 pts</p>
+                        </div>
+                        <button class="btn btn-primary">Canjear Ahora</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showPage(pageId) {
+            // Ocultar todas las páginas
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Mostrar la página seleccionada
+            const selectedPage = document.getElementById(pageId);
+            if (selectedPage) {
+                selectedPage.classList.add('active');
+                window.scrollTo(0, 0);
+            }
+        }
+    </script>
+</body>
+</html>

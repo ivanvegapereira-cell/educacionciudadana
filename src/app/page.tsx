@@ -24,7 +24,7 @@ export default function HomePage() {
       <div className="mx-auto max-w-7xl px-4 py-20">
         <div className="text-center">
           <h1 className="mb-4 text-5xl font-bold text-gray-900">
-            📚 Plataforma Educativa Integral
+            🎓 Educación Ciudadana - Plataforma Integral
           </h1>
           <p className="mb-8 text-xl text-gray-600">
             Una plataforma completa para educación ciudadana con cuestionarios, actividades,

@@ -1,12 +1,6 @@
-'use client';
-
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { Button } from '@/components/ui/Button';
-import { useAuth } from '@/hooks/useAuth';
-
 export default function HomePage() {
-  const { user, loading } = useAuth();
+  const user = null;
+  const loading = false;
 
   if (loading) {
     return (
